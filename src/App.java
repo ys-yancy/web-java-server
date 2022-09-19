@@ -1,11 +1,21 @@
 import enginer.*;
 
+import java.lang.reflect.Array;
+
 public class App {
     public Enginer register(Enginer enginer) {
         enginer.registerRouter("/test", (request, response) -> {
+            // 生成参数
+            Parameter parameter = new Parameter();
+            parameter.setValue("name", 1);
+            parameter.setValue("test", 2);
+            parameter.setValue("value", 3);
+
+            // response
             response.setStatus(200);
             response.setHeaders("Content-Type", "application/json");
-            response.send("{name: Http Server}");
+            response.setHeaders("Access-Control-Allow-Origin", "*");
+            response.send(parameter.toJsValue());
         });
 
         return enginer;
