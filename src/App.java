@@ -14,9 +14,11 @@ public class App {
     private void run() {
         this.register(new Enginer()).start(80);
     }
+
     public void start() {
         this.run();
     }
+
     public  static void  main(String[] args) {
         System.out.println("Server Run...");
         App server = new App();
