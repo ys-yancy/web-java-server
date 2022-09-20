@@ -1,15 +1,27 @@
 package enginer;
 
-import java.util.HashMap;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.HashMap;
 
-public class Enginer {
+public class Engineer {
     private final HashMap<String, Callable> routes = new HashMap();
 
     public void registerRouter(String name, Callable callback) {
         this.routes.put(name, callback);
+    }
+
+    public String getRouteName(String url) {
+        String routeName = "";
+        for (String baseRoute: routes.keySet()) {
+            if (url.startsWith(baseRoute)) {
+                routeName = baseRoute;
+                break;
+            }
+        }
+
+        return routeName;
     }
 
     public void start(int port) {
@@ -21,8 +33,9 @@ public class Enginer {
                     try {
                         Request request = new Request(client.getInputStream());
                         Response response = new Response(client.getOutputStream());
-                        if (routes.containsKey(request.getUrl())) {
-                            routes.get(request.getUrl()).callback(request, response);
+                        String baseRouteName = this.getRouteName(request.getUrl());
+                        if (baseRouteName.length() > 0) {
+                            routes.get(baseRouteName).callback(request, response);
                         } else {
                             response.setStatus(404).send(request.getUrl() + " not found");
                         }

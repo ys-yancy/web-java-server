@@ -13,6 +13,8 @@ public class Response {
 
     public Response(OutputStream outputStream) {
         this.outputStream = outputStream;
+        this.setHeaders("Access-Control-Allow-Origin", "*");
+        this.setHeaders("Content-Type", "application/json");
     }
 
     public Response setHeaders(String name, String value) {
