@@ -3,6 +3,8 @@ package controller;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.Vector;
+
 import enginer.*;
 
 public class Main extends Base {
@@ -37,26 +39,60 @@ public class Main extends Base {
         return Main.baseRoute;
     }
 
-    private Message getParameter() {
-        HashMap<String, Object> content = new HashMap();
-        content.put("items", this.getItems());
+    private HashMap<String, Object> getOaBasicInfo() {
+        HashMap<String, Object> basicInfo = new HashMap();
+        basicInfo.put("name", "OA系统");
+        basicInfo.put("terminal", "mobile");
+        return basicInfo;
+    }
 
+    private HashMap<String, Object> createCommodities(int index) {
+        HashMap<String, Object> item = new HashMap<>();
+
+        // 之后改为类
+        item.put("order", index);
+        item.put("name", "吃货");
+        item.put("price", "10.21");
+        item.put("arrivalTime", "10: 21");
+        item.put("storeName", "回龙观餐馆");
+        item.put("storeLocation", "回龙观");
+
+        return item;
+    }
+
+    private Vector<Object> getCommodities(int count) {
+        // Object[] commodities = new Object[10];
+        Vector<Object> commodities = new Vector<Object>(10, 5);
+        for (int i = 1; i <= count; i++) {
+            commodities.add(this.createCommodities(i));
+        }
+
+        return commodities;
+    }
+
+    public void processOaBasicInfo(Request request, Response response) {
+        HashMap<String, Object> content = this.getOaBasicInfo();
         Message message = new Message(200, content);
-        System.out.println(message.code);
-        return message;
-    }
 
-    private int[] getItems() {
-        int[] items = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-        return items;
-    }
-
-    public void processList(Request request, Response response) {
-        // 生成参数
-        Message parameter = this.getParameter();
-        System.out.println(parameter.toJSON());
         // response
         response.setStatus(200);
-        response.send(parameter.toJSON());
+        response.send(message.toJSON());
+    }
+
+    /**
+     * desc 购物商品
+     * @param {Request} request
+     * @param {Response} response
+     */
+    public void processCommodities(Request request, Response response) {
+        HashMap query = request.getQueryMap();
+        Vector<Object> commodities = this.getCommodities(
+                Integer.parseInt((String) query.get("count"))
+        );
+        Message message = new Message(200, commodities);
+
+        // response
+        response.setStatus(200);
+        response.send(message.toJSON());
     }
 }

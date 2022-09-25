@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.BufferedReader;
+import java.util.HashMap;
 
 public class Request {
     private String url;
@@ -29,7 +30,7 @@ public class Request {
                 String requestUrl = requestLineValues[1];
                 if (requestUrl.contains("?")) {
                     this.setUrl(requestUrl.substring(0, requestUrl.indexOf("?")));
-                    this.setQuery(requestUrl.substring(0, requestUrl.indexOf("?")) + 1);
+                    this.setQuery(requestUrl.substring(requestUrl.indexOf("?") + 1));
                 } else {
                     this.setUrl(requestUrl);
                     this.setQuery("");
@@ -60,6 +61,16 @@ public class Request {
 
     public String getQuery() {
         return query;
+    }
+
+    public HashMap<String, Object> getQueryMap() {
+        HashMap<String, Object> queryMap = new HashMap<>();
+        for (String queryValue: this.getQuery().split("&")) {
+            String[] queryValues = queryValue.split("=");
+            queryMap.put(queryValues[0], queryValues[1]);
+        }
+
+        return queryMap;
     }
 
     public String getMethod() {
