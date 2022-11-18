@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Vector;
 
 import enginer.*;
+import commodities.*;
 
 public class Main extends Base {
     public static String baseRoute = "/main";
@@ -46,30 +47,6 @@ public class Main extends Base {
         return basicInfo;
     }
 
-    private HashMap<String, Object> createCommodities(int index) {
-        HashMap<String, Object> item = new HashMap<>();
-
-        // 之后改为类
-        item.put("order", index);
-        item.put("name", "吃货");
-        item.put("price", "10.21");
-        item.put("arrivalTime", "10: 21");
-        item.put("storeName", "回龙观餐馆");
-        item.put("storeLocation", "回龙观");
-
-        return item;
-    }
-
-    private Vector<Object> getCommodities(int count) {
-        // Object[] commodities = new Object[10];
-        Vector<Object> commodities = new Vector<Object>(10, 5);
-        for (int i = 1; i <= count; i++) {
-            commodities.add(this.createCommodities(i));
-        }
-
-        return commodities;
-    }
-
     public void processOaBasicInfo(Request request, Response response) {
         HashMap<String, Object> content = this.getOaBasicInfo();
         Message message = new Message(200, content);
@@ -86,7 +63,8 @@ public class Main extends Base {
      */
     public void processCommodities(Request request, Response response) {
         HashMap query = request.getQueryMap();
-        Vector<Object> commodities = this.getCommodities(
+
+        Vector<Object> commodities = new Meals("蛋糕").buildCommodities(
                 Integer.parseInt((String) query.get("count"))
         );
         Message message = new Message(200, commodities);
