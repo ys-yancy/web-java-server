@@ -25,6 +25,7 @@ public class Base<T> {
         commodity.put("name", this.name);
         commodity.put("order", this.index);
         commodity.put("arrivalTime", "预计30分钟内送达");
+        commodity.put("image", new Image().getImage());
         commodity.put("storeName", new Merchantor().getMerchant());
         commodity.put("storeLocation", new Location().getLocation());
         commodity.put("price", String.format("%.2f", (float) (Math.random() * 50)));
@@ -36,6 +37,7 @@ public class Base<T> {
         commodity.put("name", name);
         commodity.put("order", index);
         commodity.put("arrivalTime", "预计30分钟内送达");
+        commodity.put("image", new Image().getImage());
         commodity.put("storeName", new Merchantor().getMerchant());
         commodity.put("storeLocation", new Location().getLocation());
         commodity.put("price", String.format("%.2f", (float) (Math.random() * 50)));
